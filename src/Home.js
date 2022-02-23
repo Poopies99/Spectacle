@@ -5,14 +5,14 @@ import Button from '@material-ui/core/Button';
 import QueryStatsIcon from '@mui/icons-material/QueryStats';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
-import XLSX from "xlsx";
-import exportFromJSON from 'export-from-json'  
+import exportFromJSON from 'export-from-json';
+import Diagram from './Chart';
+import { useState } from "react"
 
 const useStyles = makeStyles((theme) => ({
     statsIcon: {
         '& svg': {
-            fontSize: 250,
-            width: 500,
+            fontSize: 200,
             color: 'black',
             margin: 20,
         }
@@ -29,43 +29,47 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-
-
 const Home = (props) => {
+    const [JSONData, parseJSONData] = useState(0);
 
     const fileName = 'download';  
     const exportType = 'csv';
-
     const classes = useStyles();
+    const years = 5;
 
-    const years = 10;
-
+    const institutions = ['nafa_diploma', 'ngee_ann_polytechnic', 'lasalle_degree', 'sit', 'temasek_polytechnic', 'nafa_degree', 'smu', 'ite', 'ntu', 'nus', 'sutd', 'suss', 'nie', 'nanyang_polytechnic', 'republic_polytechnic', 'singapore_polytechnic', 'lasalle_diploma']
+    
     const handleDownload = async (event) => {
         event.preventDefault();
-        const url = "https://data.gov.sg/api/action/datastore_search?resource_id=2264a6ed-51f5-45d6-accb-1a980e32e632";
-        const response = await fetch(url);
-        var data = await response.json();
-        data = data.result.records.slice(-years).filter((element, index) => {
-            return index % 2 === 0;
-        });
+        const graduateUrl = "https://data.gov.sg/api/action/datastore_search?resource_id=2264a6ed-51f5-45d6-accb-1a980e32e632&q=MF";
+        const intakeUrl = "https://data.gov.sg/api/action/datastore_search?resource_id=be05b06d-1042-45de-a35b-5a5e04e7c704&q=MF";
+        const intakeResponse = await fetch(intakeUrl);
+        const graduateResponse = await fetch(graduateUrl);
+        const intake = await intakeResponse.json();
+        const graduate = await graduateResponse.json();
+        var intakeInfo = intake.result.records.slice(-years);
+        var data = graduate.result.records.slice(-years);
+        // var intakeInfo = intake.result.records.slice(-years).filter((element, index) => {
+        //     return index % 2 === 0;
+        // })
 
-        exportFromJSON({ data, fileName, exportType});
-        console.log(data);
+        // var data = graduate.result.records.slice(-years).filter((element, index) => {
+        //     return index % 2 === 0;
+        // });
 
-        // const ws = XLSX.utils.json_to_sheet(data);
-        // const wb = XLSX.utils.book_new();
-        // XLSX.utils.book_append_sheet(wb, ws, "SheetJS");
-        // /* generate XLSX file and send to client */
-        // XLSX.writeFile(wb, "sheetjs.xlsx");
+        data.forEach((element, index) => {
+            for (var name in data[index]) {
+                if (institutions.includes(name)) {   
+                    var column = "Percentage_Difference_for_" + name;  
+                    var percentageDiff =  (intakeInfo[index][name] - data[index][name]); //Value indicate how many more people went into the institute compared to 
+                    data[index][column] = percentageDiff;
+                }
+            }
+        })
 
-        // const replacer = (key, value) => value === null ? '' : value // specify how you want to handle null values here
-        // const header = Object.keys(data[0])
-        // const csv = [
-        // header.join(','), // header row first
-        // ...data.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','))
-        // ].join('\r\n')
+        parseJSONData(data);
 
-        // console.log(csv)
+        //exportFromJSON({ data, fileName, exportType});
     }
 
     // const handleDownload = () => {
@@ -87,7 +91,7 @@ const Home = (props) => {
     return (
         <Container>
             <LeftSection>
-                <IconButton className={classes.statsIcon}>
+                <IconButton className={classes.statsIcon} disabled={true}>
                     <QueryStatsIcon />
                 </IconButton>
                 
@@ -105,7 +109,7 @@ const Home = (props) => {
                 </Button>
             </LeftSection>
             <RightSection>
-                <span>Chart</span>
+                <Diagram stats={JSONData} />
             </RightSection>
         </Container>
     )
@@ -130,10 +134,13 @@ const LeftSection = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
+    width: 500px;
 `;
 
 const RightSection = styled.div`
-    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 `;
 
 export default Home

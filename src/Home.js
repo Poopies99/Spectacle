@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from "styled-components";
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -6,8 +6,7 @@ import QueryStatsIcon from '@mui/icons-material/QueryStats';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import exportFromJSON from 'export-from-json';
-import Diagram from './Chart';
-import { useState } from "react"
+import BarStats from './BarStats.js';
 
 const useStyles = makeStyles((theme) => ({
     statsIcon: {
@@ -30,7 +29,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Home = (props) => {
-    const [JSONData, parseJSONData] = useState(0);
+    const [JSONData, parseJSONData] = useState({});
+    const [showGraph, setGraph] = useState(false)
 
     const fileName = 'download';  
     const exportType = 'csv';
@@ -39,6 +39,9 @@ const Home = (props) => {
 
     const institutions = ['nafa_diploma', 'ngee_ann_polytechnic', 'lasalle_degree', 'sit', 'temasek_polytechnic', 'nafa_degree', 'smu', 'ite', 'ntu', 'nus', 'sutd', 'suss', 'nie', 'nanyang_polytechnic', 'republic_polytechnic', 'singapore_polytechnic', 'lasalle_diploma']
     
+    console.log("JSON Data: ", JSONData);
+    console.log(showGraph);
+
     const handleDownload = async (event) => {
         event.preventDefault();
         const graduateUrl = "https://data.gov.sg/api/action/datastore_search?resource_id=2264a6ed-51f5-45d6-accb-1a980e32e632&q=MF";
@@ -49,13 +52,6 @@ const Home = (props) => {
         const graduate = await graduateResponse.json();
         var intakeInfo = intake.result.records.slice(-years);
         var data = graduate.result.records.slice(-years);
-        // var intakeInfo = intake.result.records.slice(-years).filter((element, index) => {
-        //     return index % 2 === 0;
-        // })
-
-        // var data = graduate.result.records.slice(-years).filter((element, index) => {
-        //     return index % 2 === 0;
-        // });
 
         data.forEach((element, index) => {
             for (var name in data[index]) {
@@ -68,25 +64,13 @@ const Home = (props) => {
         })
 
         parseJSONData(data);
-
-        //exportFromJSON({ data, fileName, exportType});
+        exportFromJSON({ data, fileName, exportType});
     }
 
-    // const handleDownload = () => {
-    //     var data = {
-    //         resource_id: '2264a6ed-51f5-45d6-accb-1a980e32e632', // the resource id
-    //         limit: 5, // get 5 results
-    //         q: 'jones' // query for 'jones'
-    //     };
-    //     $.ajax({
-    //         url: 'https://data.gov.sg/api/action/datastore_search',
-    //         data: data,
-    //         dataType: 'jsonp',
-    //         success: function(data) {
-    //           alert('Total results found: ' + data.result.total)
-    //         }
-    //     });
-    // }
+    const handleGenerate = async (event) => {
+        event.preventDefault();
+        setGraph(true);
+    }
 
     return (
         <Container>
@@ -105,11 +89,15 @@ const Home = (props) => {
                 />
 
                 <Button sx={classes.download} variant="contained" size="medium" onClick={handleDownload}>
-                    Download & Generate
+                    Download
+                </Button>
+
+                <Button sx={classes.download} variant="contained" size="medium" onClick={handleGenerate}>
+                    Generate Chart
                 </Button>
             </LeftSection>
             <RightSection>
-                <Diagram stats={JSONData} />
+                { showGraph ? (<BarStats />) : (<div></div>)}
             </RightSection>
         </Container>
     )
@@ -117,7 +105,7 @@ const Home = (props) => {
 
 const Container = styled.div`
     position: relative;
-    min-height: calc(100vh - 250px);
+    min-height: calc(100vh - 150px);
     overflow-x: hidden;
     display: flex;
     top: 72px;
@@ -134,13 +122,17 @@ const LeftSection = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 500px;
+
+    Button {
+        margin-bottom: 20px
+    }
 `;
 
 const RightSection = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding-top: 100px;
 `;
 
 export default Home

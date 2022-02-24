@@ -1,6 +1,7 @@
 import './App.css';
 import Header from './Header.js';
 import Home from './Home.js';
+import Footer from './Footer';
 
 function App() {
   return (
@@ -13,9 +14,9 @@ function HomePage() {
     <div>
       <Header />
       <Home />
+      <Footer />
     </div>
   )
 }
-
 
 export default App;

@@ -1,0 +1,27 @@
+.Footer {
+    /* background-color: rgb(221, 191, 147); */
+    background-color: #B28F74;
+    height: 100px;
+    width: 100%;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+}
+
+.Footer > img {
+    width: 60px;
+    padding: 12px;
+
+}
+
+.Footer__title {
+}
+
+.Footer__link {
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: rgb(7, 0, 1);
+}

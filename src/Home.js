@@ -7,26 +7,44 @@ import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import exportFromJSON from 'export-from-json';
 import BarStats from './BarStats.js';
+import DownloadIcon from '@mui/icons-material/Download';
+import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles((theme) => ({
     statsIcon: {
         '& svg': {
             fontSize: 200,
             color: 'black',
-            margin: 20,
+            margin: -12,
         }
     },
     textBack: {
         "&.MuiFilledInput-root": {
-            background: "rgb(232, 241, 250)"
+            background: "rgb(232, 241, 250)",
         }
     },
-    download: {
-        "&.MuiButton-contained": {
-            background: "rgb(232, 241, 250)"
-        }
+    root: {
+        justifyContent: 'center'
     }
 }));
+
+const ButtonStyle = {
+    borderRadius: 35,
+    backgroundColor: "#B28F74",
+    fontSize: "8px",
+    fontWeight: "500",
+    borderRadius: "8px",
+    height: "52px",
+}
+
+const DownloadStyle = {
+    backgroundColor: "#7e624d",
+    fontSize: "8px",
+    fontWeight: "500",
+    borderRadius: "8px",
+    borderRadius: 5,
+    justifyContent: 'center',
+}
 
 const Home = (props) => {
     const [JSONData, parseJSONData] = useState({});
@@ -79,6 +97,8 @@ const Home = (props) => {
                     <QueryStatsIcon />
                 </IconButton>
                 
+                <span className='Description'>Analyze Dataset</span>
+
                 <TextField
                     required
                     id="filled-required"
@@ -88,16 +108,18 @@ const Home = (props) => {
                     variant="filled"
                 />
 
-                <Button sx={classes.download} variant="contained" size="medium" onClick={handleDownload}>
-                    Download
-                </Button>
+                <Buttons>
+                    <Button variant="contained" size="medium" onClick={handleDownload} style={DownloadStyle}>
+                        <DownloadIcon />
+                    </Button>
 
-                <Button sx={classes.download} variant="contained" size="medium" onClick={handleGenerate}>
-                    Generate Chart
-                </Button>
+                    <Button variant="contained" size="medium" onClick={handleGenerate} style={ButtonStyle}>
+                        Generate Chart
+                    </Button>
+                </Buttons>
             </LeftSection>
             <RightSection>
-                { showGraph ? (<BarStats />) : (<div></div>)}
+                { showGraph ? (<BarStats />) : (<div></div>) }
             </RightSection>
         </Container>
     )
@@ -105,17 +127,15 @@ const Home = (props) => {
 
 const Container = styled.div`
     position: relative;
-    min-height: calc(100vh - 150px);
     overflow-x: hidden;
     display: flex;
-    top: 72px;
-    padding: 0 calc(10vw + 5px);
+    padding: calc(10vw + 5px);
     display: flex;
     flex-direction: row;
-
-    div {
-        margin-bottom: 10px;
-    }
+    justify-content: center;
+    height: 472px;
+    align-self: center;
+    font: 60px;
 `;
 
 const LeftSection = styled.div`
@@ -126,13 +146,30 @@ const LeftSection = styled.div`
     Button {
         margin-bottom: 20px
     }
+
+    span {
+        align-self: center;
+        font-weight: 600;
+    }
 `;
 
 const RightSection = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding-top: 100px;
+    width: 1000px !important;
+`;
+
+const Buttons = styled.div`
+    display: flex;
+    flex: column;
+    justify-content: flex-end;
+    margin-top: 24px;
+    width: 300px !important;
+
+    Button {
+        margin-left: 12px;
+    }
 `;
 
 export default Home

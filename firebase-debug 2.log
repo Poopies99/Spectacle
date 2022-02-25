@@ -1,0 +1,25 @@
+[debug] [2022-02-24T10:55:08.520Z] ----------------------------------------------------------------------
+[debug] [2022-02-24T10:55:08.522Z] Command:       /usr/local/Cellar/node/17.4.0/bin/node /usr/local/bin/firebase init
+[debug] [2022-02-24T10:55:08.523Z] CLI Version:   10.1.1
+[debug] [2022-02-24T10:55:08.523Z] Platform:      darwin
+[debug] [2022-02-24T10:55:08.523Z] Node Version:  v17.4.0
+[debug] [2022-02-24T10:55:08.524Z] Time:          Thu Feb 24 2022 18:55:08 GMT+0800 (Singapore Standard Time)
+[debug] [2022-02-24T10:55:08.524Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-02-24T10:55:08.590Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-02-24T10:55:08.591Z] > authorizing via signed-in user (christophernge99@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/chris/Desktop/Git/GovTech Challenge/spectacle
+
+Before we get started, keep in mind:
+
+  * You are initializing within an existing Firebase project directory
+

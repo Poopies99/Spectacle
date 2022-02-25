@@ -308,14 +308,6 @@ const BarStats = () => {
         chart();
     }, []);
 
-    const options = {
-        plugins: {
-            legend: {
-                display: false
-            }
-        }
-    };
-
     return (
         <div>
             <Content>
@@ -324,7 +316,7 @@ const BarStats = () => {
                     options = {{
                         plugins: {
                             legend: {
-                            display: false,
+                            display: true,
                             },
                             title: {
                                 display: true,

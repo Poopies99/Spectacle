@@ -1,6 +1,6 @@
 # Spectacle
 
-This github repository contains the project code for Spectacle, a serverless application built for the GovTech Intern Technical Challenge. A fully functional responsive website that is built using ReactJS, AWS Cloudfront.
+This github repository contains the project code for Spectacle, a serverless application built for the GovTech Intern Technical Challenge. A fully functional responsive website that is built using ReactJS.
 
 ## <a href="https://spectacle-4a390.web.app" target="_blank"><u>Click here to access website<u></a>
 
